@@ -14,7 +14,7 @@ func CheckNumber(num uint8) bool {
 }
 
 func Unpack(input string) (string, error) {
-	var prevLetter = -1
+	prevLetter := -1
 	ret := ""
 	for i := 0; i < len(input); i++ {
 		if CheckNumber(input[i]) {
