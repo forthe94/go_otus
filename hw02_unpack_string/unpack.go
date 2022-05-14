@@ -33,7 +33,6 @@ func Unpack(input string) (string, error) {
 			prevLetter = int(input[i])
 			ret += string(input[i])
 		}
-
 	}
 	// Place your code here.
 	return ret, nil
