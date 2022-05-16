@@ -2,12 +2,13 @@ package hw02unpackstring
 
 import (
 	"errors"
+	"unicode"
 )
 
 var ErrInvalidString = errors.New("invalid string")
 
-func CheckNumber(num uint8) bool {
-	if num >= 48 && num < 58 {
+func CheckNumber(symbol rune) bool {
+	if unicode.IsDigit(symbol) {
 		return true
 	}
 	return false
@@ -16,22 +17,22 @@ func CheckNumber(num uint8) bool {
 func Unpack(input string) (string, error) {
 	prevLetter := -1
 	ret := ""
-	for i := 0; i < len(input); i++ {
-		if CheckNumber(input[i]) {
+	for _, char := range input {
+		if CheckNumber(char) {
 			if prevLetter < 0 {
 				return "", ErrInvalidString
 			}
-			if input[i] == 48 {
+			if char == '0' {
 				ret = ret[:len(ret)-1]
 			} else {
-				for j := 0; j < int(input[i]-49); j++ {
-					ret += string(uint8(prevLetter))
+				for j := 0; j < int(char-49); j++ {
+					ret += string(rune(prevLetter))
 				}
 			}
 			prevLetter = -1
 		} else {
-			prevLetter = int(input[i])
-			ret += string(input[i])
+			prevLetter = int(char)
+			ret += string(char)
 		}
 	}
 	// Place your code here.
