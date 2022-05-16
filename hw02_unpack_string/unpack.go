@@ -7,18 +7,11 @@ import (
 
 var ErrInvalidString = errors.New("invalid string")
 
-func CheckNumber(symbol rune) bool {
-	if unicode.IsDigit(symbol) {
-		return true
-	}
-	return false
-}
-
 func Unpack(input string) (string, error) {
 	prevLetter := -1
 	ret := ""
 	for _, char := range input {
-		if CheckNumber(char) {
+		if unicode.IsDigit(char) {
 			if prevLetter < 0 {
 				return "", ErrInvalidString
 			}
