@@ -26,7 +26,7 @@ func Top10(input string) []string {
 		Value int
 	}
 
-	var ss []kv
+	ss := make([]kv, 0, len(words))
 
 	for k, v := range wordsCount {
 		ss = append(ss, kv{k, v})
@@ -46,7 +46,6 @@ func Top10(input string) []string {
 			})
 			start = end
 		}
-
 	}
 
 	var ret []string
