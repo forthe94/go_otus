@@ -43,7 +43,18 @@ var text = `Как видите, он  спускается  по  лестни�
 	посидеть у огня и послушать какую-нибудь интересную сказку.
 		В этот вечер...`
 
+var text2 = "б б в в а а"
+
 func TestTop10(t *testing.T) {
+	t.Run("repeats test", func(t *testing.T) {
+		expected := []string{
+			"а",
+			"б",
+			"в",
+		}
+		require.Equal(t, expected, Top10(text2))
+	})
+
 	t.Run("no words in empty string", func(t *testing.T) {
 		require.Len(t, Top10(""), 0)
 	})
