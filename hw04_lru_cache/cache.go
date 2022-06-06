@@ -29,7 +29,7 @@ type lruCache struct {
 func (cache *lruCache) Set(key Key, value interface{}) bool {
 	res := true
 
-	if item := cache.items[key]; item == nil {
+	if item, ok := cache.items[key]; !ok {
 		newItem := cache.queue.PushFront(newCacheItem(key, value))
 		cache.items[key] = newItem
 		res = false
