@@ -3,7 +3,6 @@ package hw05parallelexecution
 import (
 	"errors"
 	"sync"
-	"sync/atomic"
 )
 
 var ErrErrorsLimitExceeded = errors.New("errors limit exceeded")
@@ -12,11 +11,13 @@ type Task func() error
 
 // Run starts tasks in n goroutines and stops its work when receiving m errors from tasks.
 func Run(tasks []Task, n, m int) error {
+	var wg sync.WaitGroup
+	var errCount uint64
+	var mutex sync.Mutex
+
 	if m < 0 {
 		m = 0
 	}
-	var wg sync.WaitGroup
-	var errCount uint64
 
 	ch := make(chan Task, len(tasks))
 
@@ -26,13 +27,19 @@ func Run(tasks []Task, n, m int) error {
 		go func() {
 			for {
 				t, ok := <-ch
-				if !ok || errCount >= uint64(m) {
+				mutex.Lock()
+				errCountCp := errCount
+				mutex.Unlock()
+
+				if !ok || errCountCp >= uint64(m) {
 					wg.Done()
 					return
 				}
 				err := t()
 				if err != nil {
-					atomic.AddUint64(&errCount, 1)
+					mutex.Lock()
+					errCount++
+					mutex.Unlock()
 				}
 			}
 		}()
